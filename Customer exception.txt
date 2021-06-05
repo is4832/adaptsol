@@ -1,0 +1,318 @@
+import java.util.*;
+
+class CustomerNotFoundException extends RuntimeException {
+
+   private static final long serialVersionUID = -1510453123644668900L;
+
+   public CustomerNotFoundException(String message) {
+      super(message);
+   }
+
+}
+
+interface CustomerService {
+   void createCustomer(Customer customer);
+
+   Customer updateCustomer(Customer customer);
+
+   void deleteCustomer(int id);
+   
+   Customer searchCustomer(int id);
+
+   Customer[] getCustomers();
+}
+
+class CustomerServiceImpl implements CustomerService {
+   public static Customer[] bookArray = new Customer[5];
+   public static int count = 0;
+
+   @Override
+   public void createCustomer(Customer customer){
+        bookArray[count] = customer;
+        count++;
+   }
+
+   public Customer updateCustomer(Customer customer) throws CustomerNotFoundException{
+     boolean flag = false;
+      for (int i = 0; i <= count; i++) {
+         if (bookArray[i].getUserId() == customer.getUserId()) {
+            bookArray[i] = customer;
+            return customer;
+         }
+      }
+      if(flag == false)
+       throw new CustomerNotFoundException("CustomerNotFoundException");
+     return null;
+   }
+
+   public void deleteCustomer(int userId) throws CustomerNotFoundException{
+      boolean flag = false;
+      for (int i = 0; i <= count; i++) {
+         if (bookArray[i].getUserId() == userId) {
+            bookArray[i] = null;
+            flag = true;
+            break;
+         }
+      }
+      if(flag == false){
+       throw new CustomerNotFoundException("CustomerNotFoundException");
+      } 
+   }
+   
+   public Customer searchCustomer(int userId) throws CustomerNotFoundException{
+      boolean flag = false;
+      for (int i = 0; i <= count; i++) {
+         if (bookArray[i].getUserId() == userId) {
+            return bookArray[i];
+         }
+      }
+      if(flag == false){
+       throw new CustomerNotFoundException("CustomerNotFoundException");
+      }
+      return null;
+   }
+
+   public Customer[] getCustomers() {
+      return bookArray;
+   }
+
+}
+
+class Address{
+    private String city;
+    private String state;
+    private int zip;
+    private String country;
+    
+    public Address(){
+    }
+    
+    public Address(String city, String state, int zip, String country){
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.country = country;
+    }
+    
+    public void setCity(String city){
+        this.city = city;
+    }
+    
+    public String getCity(){
+        return city;
+    }
+    
+    public void setState(String state){
+        this.state = state;
+    }
+    
+    public String getState(){
+        return state;
+    }
+    
+    public void setCountry(String country){
+        this.country = country;
+    }
+    
+    public int getZip(){
+        return zip;
+    }
+    
+    public void setZip(int zip){
+        this.zip = zip;
+    }
+    
+    public String getCountry(){
+        return country;
+    }
+}
+
+class Customer {
+    private int userId;
+    private String emailId;
+    private String password;
+    private String firstName;
+    private String city;
+    private String gender;
+    private long phoneNumber;
+    private String lastName;
+    private Address address;
+    
+    public Customer(){
+    }
+    
+    public Customer(int userId, String emailId, String password, String firstName, String lastName, 
+    String city, String gender, long phoneNumber, Address address){
+        this.userId = userId;
+        this.emailId = emailId;
+        this.password = password;
+        this.firstName = firstName;
+        this.city = city;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.lastName = lastName;
+        this.address = address;
+    }
+    
+     public void setAddress(Address address){
+        this.address = address;
+    }
+    
+    public Address getAddress(){
+        return address;
+    }
+    
+    public int getUserId(){
+        return userId;
+    }
+    
+    public String getEmailId(){
+        return emailId;
+    }
+    
+    public String getFirstName(){
+        return firstName;
+    }
+    
+    public String getPassword(){
+        return password;
+    }
+    
+    public String getCity(){
+        return city;
+    }
+    
+    public String getGender(){
+        return gender;
+    }
+    
+    public long getPhoneNumber(){
+        return phoneNumber;
+    }
+    
+    public String getLastName(){
+        return lastName;
+    }
+    
+    public void setUserId(int userId){
+        this.userId = userId;
+    }
+    
+    public void setEmailId(String emailId)
+    {
+        this.emailId = emailId;
+    }
+    
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+    
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+    
+    public void setGender(String gender)
+    {
+        this.gender = gender;
+    }
+    
+    public void setCity(String city)
+    {
+        this.city = city;
+    }
+    
+    public void setPhoneNumber(long phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+    
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+}
+class Source {
+   public static void main(String args[]) throws Exception{
+    try{
+      Scanner s = new Scanner(System.in);
+      int choice = s.nextInt();
+      int id, zip;
+      String acity, state, country, emailId, password, firstName, lastName, city, gender;
+      long phoneNumber;
+      Customer[] books;
+      switch (choice) {
+         case 1:
+            if (s.hasNext()) {
+               id = s.nextInt();
+               s.nextLine();
+               emailId = s.nextLine();
+               password = s.nextLine();
+               firstName = s.nextLine();
+               city = s.nextLine();
+               gender = s.nextLine();
+               lastName = s.nextLine();
+               phoneNumber = s.nextLong();
+               acity = s.next();
+               state = s.next();
+               zip = s.nextInt();
+               country = s.next();
+               
+               Address address = new Address(acity, state, zip, country); 
+               Customer t = new Customer(id, emailId, password, firstName, lastName, city, gender, phoneNumber, address);
+               CustomerService adm = new CustomerServiceImpl();
+               adm.createCustomer(t);
+               books = adm.getCustomers();
+               System.out.println(t);
+            }
+            break;
+         case 2:
+            if (s.hasNext()) {
+               id = s.nextInt();
+               s.nextLine();
+               emailId = s.nextLine();
+               password = s.nextLine();
+               firstName = s.nextLine();
+               city = s.nextLine();
+               gender = s.nextLine();
+               lastName = s.nextLine();
+               phoneNumber = s.nextLong();
+               acity = s.next();
+               state = s.next();
+               zip = s.nextInt();
+               country = s.next();
+               
+               Address address = new Address(acity, state, zip, country);
+               Customer t1 = new Customer(id, emailId, password, firstName, lastName, city, gender, phoneNumber, address);
+               CustomerService adm1 = new CustomerServiceImpl();
+               adm1.updateCustomer(t1);
+               System.out.println(t1);
+            }
+            break;
+         case 3:
+            id = s.nextInt();
+            CustomerService adm2 = new CustomerServiceImpl();
+            adm2.deleteCustomer(id);
+            break;
+         case 4:
+            id = s.nextInt();
+            Customer t3;
+            CustomerService adm3 = new CustomerServiceImpl();
+            t3 = adm3.searchCustomer(id);
+            System.out.println(t3);
+            break;
+         case 5:
+            CustomerService adm4 = new CustomerServiceImpl();
+            books = adm4.getCustomers();
+            for (int i = 0; i < books.length; i++) {
+               System.out.println(adm4.toString());
+            }
+      }
+      s.close();
+    } catch(CustomerNotFoundException e)
+    {
+        System.out.println(e.getMessage());
+    }
+   }
+}

@@ -1,0 +1,245 @@
+import java.util.*;
+
+class CustomerService {
+    public void rentBook(BookRental bookRental) {
+        BookRentalService adm = new BookRentalServiceImpl(); 
+        BookRental[] books = adm.searchByCustomerId(bookRental.getUserId());
+        if(books.length < 2){
+            adm.createBookRental(bookRental);
+            System.out.println(bookRental);
+        }
+        else{
+            System.out.println("User already has two books rented");
+        }
+    }
+    
+    public BookRental[] getRentalBookDetails(BookRental bookRental){
+        BookRentalService adm = new BookRentalServiceImpl();
+        BookRental[] books = adm.getBookRentals();
+        return books;
+    }
+}
+
+interface BookRentalService {
+    void createBookRental(BookRental bookRental);
+    BookRental updateBookRental(BookRental bookRental);
+    void deleteBookRental(int rentalId);
+    BookRental[] getBookRentals();
+    BookRental[] searchByCustomerId(int customerId);
+    BookRental[] searchByBookId(int bookId);
+}
+
+class BookRentalServiceImpl implements BookRentalService{
+    public static BookRental[] booRentalArray = new BookRental[5];
+    public static int count = 0;
+    
+    @Override
+    public void createBookRental(BookRental bookRental){
+        booRentalArray[count] = bookRental;
+        count++;
+    }
+    
+    public BookRental updateBookRental(BookRental bookRental){
+        for (int i = 0; i <= count; i++) {
+         if (booRentalArray[i].getRentalId() == bookRental.getRentalId()) {
+            booRentalArray[i] = bookRental;
+            return bookRental;
+         }
+      }
+      return null;
+    }
+    
+    public void deleteBookRental(int rentalId) {
+        for (int i = 0; i <= count; i++) {
+         if (booRentalArray[i].getRentalId() == rentalId) {
+            booRentalArray[i] = null;
+            break;
+         }
+      }
+    }
+    
+    public BookRental[] getBookRentals(){
+        return booRentalArray;
+    }
+    
+    public BookRental[] searchByCustomerId(int customerId){
+        ArrayList<BookRental> books = new ArrayList<BookRental>();
+        for (int i = 0; i <= count; i++) {
+         if (booRentalArray[i].getUserId() == customerId) {
+            books.add(booRentalArray[i]);
+         }
+      }
+      BookRental[] b = new BookRental[books.size()];
+      for(int i=0;i<books.size();i++)
+       b[i] = books.get(i);
+      return b;
+    }
+    
+    public BookRental[] searchByBookId(int bookId){
+        ArrayList<BookRental> books = new ArrayList<BookRental>();
+        for (int i = 0; i <= count; i++) {
+         if (booRentalArray[i].getBookId() == bookId) {
+            books.add(booRentalArray[i]);
+         }
+      }
+      BookRental[] b = new BookRental[books.size()];
+      for(int i=0;i<books.size();i++)
+       b[i] = books.get(i);
+      return b;
+    }
+}
+
+class BookRental{
+    // private static int countId;
+    private int rentalId;
+    private int bookId;
+    private int userId;
+    private int quantity;
+    private Date startDate;
+    private Date endDate;
+    private Double totalAmount;
+    private Date returnedDate;
+    
+    public BookRental(){
+    }
+    
+    public BookRental(int rentalId, int bookId, int userId, int quantity, Date startDate, Date endDate,
+    Double totalAmount, Date returnedDate){
+        this.rentalId = rentalId; 
+        this.userId = userId;
+        this.quantity = quantity;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalAmount = totalAmount;
+        this.returnedDate = returnedDate;
+    }
+    
+    public void setRentalId(int rentalId){
+        this.rentalId = rentalId;
+    }
+    public int getRentalId(){
+        return rentalId;
+    }
+    
+    public void setUserId(int userId){
+        this.userId = userId;
+    }
+    
+    public int getUserId(){
+        return userId;
+    }
+    
+    public void setBookId(int bookId){
+        this.bookId = bookId;
+    }
+    
+    public int getBookId(){
+        return bookId;
+    }
+    
+    public void setQuauntity(int quantity){
+        this.quantity = quantity;
+    }
+    
+    public int getQuantity(){
+        return quantity;
+    }
+    
+    public void setStartDate(Date startDate){
+        this.startDate = startDate;
+    }
+    
+    public Date getStartDate(){
+        return startDate;
+    }
+    
+    public void setEndDate(Date endDate){
+        this.endDate = endDate;
+    }
+    
+    public Date getEndDate(){
+        return endDate;
+    }
+    
+    public void setReturnedDate(Date returnedDate){
+        this.returnedDate = returnedDate;
+    }
+    
+    public Date getReturnedDate(){
+        return returnedDate;
+    }
+    
+    public void setTotalAmount(double totalAmount){
+        this.totalAmount = totalAmount;
+    }
+    
+    public double getTotalAmount(){
+        return totalAmount;
+    }
+}
+class Source{
+    public static void main(String args[]){
+      Scanner s = new Scanner(System.in);
+      int choice = s.nextInt();
+      int rentalid, userId, bookId, quantity;
+      Date startDate, endDate, returnedDate;
+      double totalAmount;
+      BookRental[] books;
+      switch (choice) {
+         case 1:
+            if (s.hasNext()) {
+               rentalId = s.nextInt();
+               userId = s.nextInt();
+               bookId = s.nextInt();
+               quantity = s.nextInt();
+               //s.nextLine();
+                = s.nextLine();
+               description = s.nextLine();
+               author = s.nextLine();
+               availableQuantity = s.nextInt();
+               totalQuantity = s.nextInt();
+               price = s.nextDouble();
+               rentPerDay = s.nextDouble();
+               Book t = new Book(id, title, description, author, availableQuantity, totalQuantity, price, rentPerDay);
+               AdminService adm = new AdminServiceImpl();
+               adm.createBook(t);
+               books = adm.getBooks();
+               System.out.println(t);
+            }
+            break;
+         case 2:
+            id = s.nextInt();
+            s.nextLine();
+            title = s.nextLine();
+            description = s.nextLine();
+            author = s.nextLine();
+            availableQuantity = s.nextInt();
+            totalQuantity = s.nextInt();
+            price = s.nextDouble();
+            rentPerDay = s.nextDouble();
+            Book t1 = new Book(id, title, description, author, availableQuantity, totalQuantity, price, rentPerDay);
+            AdminService adm1 = new AdminServiceImpl();
+            t1 = adm1.updateBook(t1);
+            System.out.println(adm1.toString());
+            break;
+         case 3:
+            id = s.nextInt();
+            AdminService adm2 = new AdminServiceImpl();
+            adm2.deleteBook(id);
+            break;
+         case 4:
+            id = s.nextInt();
+            Book t3;
+            AdminService adm3 = new AdminServiceImpl();
+            t3 = adm3.searchBook(id);
+            System.out.println(t3);
+            break;
+         case 5:
+            AdminService adm4 = new AdminServiceImpl();
+            books = adm4.getBooks();
+            for (int i = 0; i < books.length; i++) {
+               System.out.println(adm4.toString());
+            }
+    }
+}
+
